@@ -1,39 +1,42 @@
 "use strict";
 
 const { CLIENT } = require('../config/pg-config');
-const { CAMEL_CASE } = require('../engine/global');
-const { AUTH_LOGIN, VERIFY_AUTH } = require('../services/auth');
+const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
+
+const { CAMEL_CASE, VALIDATION } = require('../engine/global');
+const { VALID_PASSWORD } = require('../engine/password');
 
 const SECURITY = {
     login: async (req, res) => {
         try {
-            let login = await AUTH_LOGIN(req);
-            if (login.success === true && login.errors === false) {
-                req.headers.authorization = `Bearer ${login.token}`;
-                let auth = await VERIFY_AUTH(req);
-                if (auth.success === true && auth.errors === false) {
-                    let roles = await CLIENT.query(`
-                    SELECT
-                        pr.s_user_id AS user_id,
-                        pr.pa_permission_id AS permission_id,
-                        pp."name" as roles
-                    FROM
-                        pa_roles pr
-                    LEFT JOIN pa_permission pp ON
-                        pp.pa_permission_id = pr.pa_permission_id 
-                    WHERE
-                        pr.isactive = TRUE
-                        AND pr.s_user_id = '${auth.results.userId}'`);
-                    if (roles.rowCount > 0) {
-                        res.json({ status: 'OK', success: true, errors: false, token: login.token, roles: roles.rows[0].roles });
+            if (VALIDATION({ 'username': req.body.username, 'password': req.body.password }) === false) {
+                CLIENT.query(`
+                select
+                    au.a_user_id as user_id,
+                    au."password" as user_password,
+                    au.a_roles_id as roles_id
+                from
+                    a_user au
+                where
+                    au.username = '${req.body.username}'
+                limit 1`).then((results) => {
+                    if (results.rows.length > 0) {
+                        let checkPassword = VALID_PASSWORD(req.body.password, results.rows[0].user_password);
+                        if (checkPassword === true) {
+                            let token = jwt.sign({ userId: results.rows[0].user_id }, process.env.JWT_SECRET)
+                            res.json({ status: 'OK', success: true, errors: false, token: token })
+                        } else {
+                            res.json({ status: 'OK', success: false, errors: true, message: 'Kata Sandi Tidak Valid' })
+                        }
                     } else {
-                        res.json({ status: 'OK', success: false, errors: true, message: 'Invalid Credential' });
+                        res.json({ status: 'OK', success: false, errors: true, message: 'Pengguna Tidak Ditemukan' });
                     }
-                } else {
-                    res.json({ status: 'OK', success: false, errors: true, message: auth.message });
-                }
+                }).catch((e) => {
+                    return res.json({ status: 'OK', success: false, errors: true, message: e.message })
+                })
             } else {
-                res.json({ status: 'OK', success: false, errors: true, message: login.message });
+                return res.json({ status: 'OK', success: false, errors: true, message: 'Silahkan Masukkan Username dan Kata Sandi Anda' })
             }
         } catch (err) {
             res.json({ status: 'OK', success: false, errors: true, message: err.message });
@@ -42,49 +45,30 @@ const SECURITY = {
 
     verify: async (req, res, next) => {
         try {
-            let auth = await VERIFY_AUTH(req);
-            if (auth.success === true && auth.errors === false) {
+            let token = req.headers.authorization.split(" ")[1];
+            jwt.verify(token, process.env.JWT_SECRET, (error, decode) => {
                 CLIENT.query(`
-                    SELECT 
-                        kp.s_user_id as user_id,
-                        kp.k_partner_id as partner_id
-                    FROM k_partner kp
-                    WHERE kp.isactive=true AND
-                        kp.k_partner_id='${auth.results.partnerId}' AND
-                        kp.s_user_id='${auth.results.userId}'`
-                ).then((results) => {
+                select
+                    au.a_user_id as user_id,
+                    au."name" as user_name,
+                    au.email as user_email,
+                    au.phone as user_phone
+                from
+                    a_user au
+                where
+                    au.a_user_id = '${decode.userId}'`).then((results) => {
                     if (results.rows.length > 0) {
                         req.logged = CAMEL_CASE(results.rows[0]);
-                        next()
-                    } else {
-                        res.json({ status: 'OK', success: false, errors: true, message: 'Izin ditolak' });
+                        next();
                     }
-                }).catch((err) => {
-                    res.json({ status: 'OK', success: false, errors: true, message: err.message });
+                }).catch((e) => {
+                    res.json({ status: 'OK', success: false, errors: true, message: e.message });
                 });
-            } else {
-                return res.json({ status: 'OK', success: false, message: 'Unauthorized' });
-            }
+            });
         } catch (err) {
             return res.json({ status: 'OK', success: false, message: err.message });
         };
     },
-
-    verifyPassword: async (req, res) => {
-        try {
-
-        } catch (err) {
-            return res.json({ status: 'OK', success: false, message: err.message });
-        }
-    },
-
-    forgotPassword: async (req, res) => {
-        try {
-
-        } catch (err) {
-            return res.json({ status: 200, success: false, message: err.message });
-        }
-    }
 }
 
 module.exports = SECURITY;

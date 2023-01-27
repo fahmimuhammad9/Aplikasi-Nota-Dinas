@@ -2,12 +2,17 @@
 /backend/node_modules
 /backend/.pnp
 /backend/.pnp.js
+/frontend/node_modules
+/frontend/.pnp
+/frontend/.pnp.js
 
 # testing
 /backend/coverage
+/frontend/coverage
 
 # production
 /backend/build
+/frontend/build
 
 # misc
 .DS_Store
@@ -17,6 +22,12 @@
 /backend/.env.development.local
 /backend/.env.test.local
 /backend/.env.production.local
+/frontend/**/.env
+/frontend/.env
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
 
 # debug
 npm-debug.log*
@@ -29,3 +40,4 @@ yarn-error.log*
 
 # logs 
 /backend/logs
+/frontend/logs

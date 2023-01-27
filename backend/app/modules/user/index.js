@@ -39,8 +39,7 @@ const USER = {
 const PHONE_EMAIL_CHECK = async (email, phone, username) => {
     try {
         let results = await CLIENT.query(`SELECT COUNT(*) FROM a_user WHERE email='${email}' OR phone='${phone}' OR username='${username}'`);
-        console.log(results.rows);
-        if (results.rowCount > 0) {
+        if (results.rows[0].count != 0) {
             return { success: true, errors: false, message: 'Email / Nomor HP Telah Terdaftar' }
         } else {
             return { success: false, errors: false, message: 'Boleh Mendaftar' }
