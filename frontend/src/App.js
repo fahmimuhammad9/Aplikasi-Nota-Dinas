@@ -1,15 +1,16 @@
 import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import LoginPage from './pages/auth/LoginPage.jsx';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Login from './components/login';
+import Dashboard from './components/dashboard';
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        <Route path='/' element='' />
-        <Route path='/login' element={<LoginPage />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/' element={<Dashboard />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 

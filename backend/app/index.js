@@ -2,7 +2,7 @@
 
 const server = require('./server')
 const dotenv = require('dotenv')
-const http = require('http');
+const http = require('http')
 
 dotenv.config();
 
