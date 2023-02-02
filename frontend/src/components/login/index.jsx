@@ -1,4 +1,3 @@
-import '../../styles/adminLte.css';
 import FormLogin from './FormLogin';
 
 const Login = () => {

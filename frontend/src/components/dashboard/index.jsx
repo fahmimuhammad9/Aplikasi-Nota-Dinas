@@ -1,9 +1,16 @@
-import '../../styles/adminLte.css'
 import NavigationBar from "./NavigationBar"
+import SideBar from "./SideBar"
+import Header from "./Header"
 
 const Dashboard = () => {
     return (
-        <NavigationBar />
+        <div className='hold-transition sidebar-mini layout-fixed'>
+            <div className='wrapper'>
+                <NavigationBar />
+                <SideBar />
+                <Header />
+            </div>
+        </div>
     )
 }
 

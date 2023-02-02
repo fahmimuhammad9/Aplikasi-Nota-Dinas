@@ -13,13 +13,14 @@ const SECURITY = {
             if (VALIDATION({ 'username': req.body.username, 'password': req.body.password }) === false) {
                 CLIENT.query(`
                 select
-                    au.a_user_id as user_id,
-                    au."password" as user_password,
-                    au.a_roles_id as roles_id
+                    su.s_user_id as user_id,
+                    su."password" as user_password,
+                    su.s_role_id as role_id
                 from
-                    a_user au
+                    s_user su
                 where
-                    au.username = '${req.body.username}'
+                    su.username = '${req.body.username}'
+                    and su.isactive = true
                 limit 1`).then((results) => {
                     if (results.rows.length > 0) {
                         let checkPassword = VALID_PASSWORD(req.body.password, results.rows[0].user_password);
@@ -49,14 +50,14 @@ const SECURITY = {
             jwt.verify(token, process.env.JWT_SECRET, (error, decode) => {
                 CLIENT.query(`
                 select
-                    au.a_user_id as user_id,
-                    au."name" as user_name,
-                    au.email as user_email,
-                    au.phone as user_phone
+                    su.s_user_id as user_id,
+                    su."name" as user_name,
+                    su.email as user_email,
+                    su.s_role_id as role_id
                 from
-                    a_user au
+                    s_user su
                 where
-                    au.a_user_id = '${decode.userId}'`).then((results) => {
+                    su.s_user_id  = '${decode.userId}'`).then((results) => {
                     if (results.rows.length > 0) {
                         req.logged = CAMEL_CASE(results.rows[0]);
                         next();

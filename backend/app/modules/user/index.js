@@ -1,7 +1,7 @@
 'use strict';
 
 const { CLIENT } = require('../../config/pg-config');
-const { CAMEL_CASE, PAGINATION } = require('../../engine/global');
+const { CAMEL_CASE, PAGINATION, PREFIX_PHONE_NUMBER } = require('../../engine/global');
 const { v4: uuidv4 } = require('uuid');
 const moment = require('moment');
 const { PASSWORD_HASH } = require('../../engine/password');
@@ -15,7 +15,7 @@ const USER = {
             }
             console.log(PE_CHECK)
             let userId = uuidv4();
-            await CLIENT.query(`INSERT INTO a_user (a_user_id, created, createdby, updated, updatedby, isactive, name, username, email, phone, password) 
+            await CLIENT.query(`INSERT INTO s_user (s_user_id, created, createdby, updated, updatedby, isactive, username, name, email, phone, password) 
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`, [
                 userId,
                 moment(new Date).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss'),
@@ -23,10 +23,10 @@ const USER = {
                 moment(new Date).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss'),
                 userId,
                 true,
-                req.body.name,
                 req.body.username,
+                req.body.name,
                 req.body.email,
-                req.body.phone,
+                PREFIX_PHONE_NUMBER(req.body.phone),
                 PASSWORD_HASH(req.body.password)
             ])
             return res.json({ status: 'OK', success: true, errors: false, message: 'Berhasil menambahkan Pengguna' })
@@ -38,7 +38,7 @@ const USER = {
 
 const PHONE_EMAIL_CHECK = async (email, phone, username) => {
     try {
-        let results = await CLIENT.query(`SELECT COUNT(*) FROM a_user WHERE email='${email}' OR phone='${phone}' OR username='${username}'`);
+        let results = await CLIENT.query(`SELECT COUNT(*) FROM s_user WHERE email='${email}' OR phone='${phone}' OR username='${username}'`);
         if (results.rows[0].count != 0) {
             return { success: true, errors: false, message: 'Email / Nomor HP Telah Terdaftar' }
         } else {
