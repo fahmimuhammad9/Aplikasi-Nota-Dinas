@@ -1,51 +1,44 @@
 <x-auth-layout>
-<div class="login-box">
-  <div class="login-logo">
-    <a href="{{route('  login') }}">Aplikasi <b>Nota Dinas</b></a>
-  </div>
-  <!-- /.login-logo -->
-  <div class="card">
-    <div class="card-body login-card-body">
-      <p class="login-box-msg">PT Pesonna Optima Jasa</p>
-      <form action="../../index3.html" method="post">
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Username">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-user"></span>
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="content-wrapper d-flex align-items-center auth px-0">
+            <div class="row w-100 mx-0">
+                <div class="col-lg-4 mx-auto">
+                    <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+                        <h4>Aplikasi Nota Dinas</h4>
+                        <h6 class="font-weight-light">PT. Pesonna Optima Jasa</h6>
+                        @if(session()->has('error'))
+                        <div class="alert alert-danger" role="alert">
+                            {{session('error')}}
+                        </div>
+                        @endif
+                        <form class="pt-3" action="{{route('login')}}" method="post">
+                            @csrf
+                            <div class="form-group">
+                                <input type="text" class="form-control form-control-lg" id="username"
+                                    placeholder="Masukkan Username" name="username">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control form-control-lg" id="password"
+                                    name="password" placeholder="Masukkan Password">
+                            </div>
+                            <div class="mt-3">
+                                <button class="btn btn-block btn-primary btn-sm auth-form-btn" type="submit">SIGN
+                                    IN</button>
+                            </div>
+                            <div class="my-2 d-flex justify-content-between align-items-center">
+                                <div class="form-check">
+                                    <label class="form-check-label text-muted">
+                               >
+                                    </label>
+                                </div>
+                                <a href="#" class="auth-link text-black">Forgot password?</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-          </div>
-          <!-- /.col -->
-        </div>
-      </form>
-      <hr>
-      <p class="mb-1">
-        <a href="forgot-password.html">I forgot my password</a>
-      </p>
+        <!-- content-wrapper ends -->
     </div>
-    <!-- /.login-card-body -->
-  </div>
-</div>
+    <!-- page-body-wrapper ends -->
 </x-auth-layout>

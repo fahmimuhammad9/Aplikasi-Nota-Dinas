@@ -1,0 +1,1 @@
+<a href="{{ $url }}" {{ $attributes->merge(['class' => 'd-flex justify-content-center align-items-center btn btn-rounded btn-icon btn-'.$type]) }}><i class="{{ $icon }}"></i></a>

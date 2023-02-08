@@ -1,0 +1,1 @@
+<a href="{{ $url }}" {{ $attributes->merge(['class' => 'btn btn-rounded btn-fw btn-'.$type]) }}>{{ $content }}</a>

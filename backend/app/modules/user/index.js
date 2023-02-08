@@ -5,18 +5,30 @@ const { CAMEL_CASE, PAGINATION, PREFIX_PHONE_NUMBER } = require('../../engine/gl
 const { v4: uuidv4 } = require('uuid');
 const moment = require('moment');
 const { PASSWORD_HASH } = require('../../engine/password');
+const fs = require('fs');
+const csv = require('csv-parser');
 
 const USER = {
+    csvRegister: async(req, res)=>{
+        try{
+            fs.createReadStream(req.file)
+            .pipe(csv())
+            .on('data',(data)=>{
+                CLIENT.query(``)
+            })
+        }catch(err){
+            return res.json({status:'OK', success:false, errors: true, message: err.message});  
+        }
+    },
     register: async (req, res) => {
         try {
             let PE_CHECK = await PHONE_EMAIL_CHECK(req.body.email, req.body.phone, req.body.username);
             if (PE_CHECK.success == true && PE_CHECK.errors == false) {
                 return res.json({ status: 'OK', success: false, errors: true, message: PE_CHECK.message });
             }
-            console.log(PE_CHECK)
             let userId = uuidv4();
-            await CLIENT.query(`INSERT INTO s_user (s_user_id, created, createdby, updated, updatedby, isactive, username, name, email, phone, password) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`, [
+            await CLIENT.query(`INSERT INTO s_user (s_user_id, created, createdby, updated, updatedby, isactive, 
+                username, name, email, phone, password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`, [
                 userId,
                 moment(new Date).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss'),
                 userId,
