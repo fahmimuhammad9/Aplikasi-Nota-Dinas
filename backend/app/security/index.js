@@ -53,7 +53,8 @@ const SECURITY = {
                     su.s_user_id as user_id,
                     su."name" as user_name,
                     su.email as user_email,
-                    su.s_role_id as role_id
+                    su.s_role_id as role_id,
+                    su.s_organization_id as organization_id 
                 from
                     s_user su
                 where

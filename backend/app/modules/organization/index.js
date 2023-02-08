@@ -36,20 +36,21 @@ const ORGANIZATION = {
                 so."level" AS organization_level,
                 CASE
                     WHEN so.parent_id IS NULL THEN 
-                    'No Parent Item'
+                    'No Parent Organization'
                     ELSE (
                         SELECT
-                            name
+                            so2.name
                         FROM
-                            s_organization so
+                            s_organization so2
                         WHERE
-                            so.s_organization_id = so.parent_id
+                            so2.s_organization_id = so.parent_id
                     )
                 END AS organization_parent
             FROM
                     s_organization so
             WHERE
-                so.isactive = TRUE`);
+                so.isactive = TRUE
+                ORDER BY so."level" DESC `);
             return res.json({ status: 'OK', success: true, errors: false, results: CAMEL_CASE(results.rows) })
         } catch (err) {
             return res.json({ status: 'OK', sucess: false, errors: true, message: err.message });
