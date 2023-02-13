@@ -151,6 +151,80 @@ const NODIN = {
     },
     uploadAttachment: async(req, res)=>{
 
+    },
+    findById: async(req, res)=>{
+        try{
+            let results = await CLIENT.query(`
+            SELECT
+                dn.d_nodin_id AS nodin_id,
+                (
+                    SELECT
+                        sr."name"
+                    FROM
+                        s_role sr
+                    WHERE
+                        sr.s_role_id = dn.from_user_id
+                )AS from_user_role,
+                (
+                    SELECT
+                        sr."name"
+                    FROM
+                        s_role sr
+                    WHERE
+                        sr.s_role_id = dn.to_user_id
+                ) AS to_user_role,
+                dn.up_date ,
+                dn.attachment ,
+                (
+                    SELECT
+                        ds."name"
+                    FROM
+                        d_severity ds
+                    WHERE
+                        ds.d_severity_id = dn.char_severity_id
+                ) AS char_severity_name,
+                (
+                    SELECT
+                        ds."name"
+                    FROM
+                        d_severity ds
+                    WHERE
+                        ds.d_severity_id = dn.urgent_severity_id
+                ) AS urgent_severity_name,
+                dn.title ,
+                dn."content" ,
+                dn.nodin_number
+            FROM
+                d_nodin dn
+            WHERE
+                dn.isactive = TRUE
+                AND dn.d_nodin_id = '${req.query.nodinId}'`);
+            let data = results.rows[0];
+            let approval = await CLIENT.query(`
+            SELECT
+                dn.d_nodinapproval_id AS approval_id,
+                su."name" AS approval_person_name,
+                sr."name" AS approval_person_role,
+                so."name" AS approval_person_organization,
+                dn.review AS review,
+                dn.isapprove
+            FROM
+                d_nodinapproval dn
+            INNER JOIN s_user su ON
+                su.s_user_id = dn.s_user_id
+            INNER JOIN s_role sr ON
+                sr.s_role_id = su.s_role_id
+            INNER JOIN s_organization so ON
+                so.s_organization_id = su.s_organization_id
+            WHERE
+                dn.d_nodin_id = '${req.query.nodinId}'
+                AND dn.isactive = TRUE`);
+
+            data.approval = approval.rows
+            return res.json({status:'OK', success:true, errors: false, results: CAMEL_CASE(data)})
+        }catch(err){
+            return res.json({status:'OK', success:false, errors:true, message: err.message});
+        }
     }
 }
 

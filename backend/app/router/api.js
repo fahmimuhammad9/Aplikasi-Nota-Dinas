@@ -46,6 +46,8 @@ API_ROUTER.route('/view').get(PRINT.test);
 API_ROUTER.route('/register').post(USER.register);
 API_ROUTER.route('/login').post(SECURITY.login);
 
+API_ROUTER.route('/user').get(SECURITY.verify, USER.findAll);
+
 API_ROUTER.route('/roles').post(SECURITY.verify, USER_ROLES.created);
 API_ROUTER.route('/roles').get(SECURITY.verify, USER_ROLES.findAll);
 
@@ -56,6 +58,7 @@ API_ROUTER.route('/organization/roles').post(SECURITY.verify, ROLES.created);
 API_ROUTER.route('/organization/roles').get(SECURITY.verify, ROLES.findAll);
 
 API_ROUTER.route('/nodin/origin').get(SECURITY.verify, NODIN.checkOrigin);
+API_ROUTER.route('/nodin/detail').get(SECURITY.verify, NODIN.findById);
 API_ROUTER.route('/nodin/severity').get(SECURITY.verify, TYPE.findAll);
 API_ROUTER.route('/nodin/severity').post(SECURITY.verify, TYPE.created);
 

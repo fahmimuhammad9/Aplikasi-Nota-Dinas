@@ -78,6 +78,34 @@
                         </tr>
                       </thead>
                       <tbody>
+                        @forelse($user as $item)
+                        <tr>
+                            <td>
+                                {{$item['userName']}}
+                            </td>
+                            <td>
+                                {{$item['userUsername']}}
+                            </td>
+                            <td>
+                                {{$item['userEmail']}}
+                            </td>
+                            <td>
+                                {{$item['userPhone']}}
+                            </td>
+                            <td>
+                                {{$item['roleName']}}
+                            </td>
+                            <td>
+                                <a href="" class="btn btn-md btn-outline-success">
+                                    <i class="ti-eye"></i>
+                                </a>
+                                <a href="" class="btn btn-md btn-outline-danger">
+                                    <i class="ti-trashn"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        @empty
+                        @endforelse
                       </tbody>
                     </table>
                   </div>

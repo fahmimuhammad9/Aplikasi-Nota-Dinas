@@ -38,6 +38,16 @@ class NodinController extends Controller
         return view('pages.document.create', compact('origin', 'destName', 'orginName', 'severity'));
     }
 
+    public function detail(Request $request, $id){
+        $response = Http::withToken(session('access_token'))->withOptions([
+            'query' => [
+                'nodinId' => $id
+            ]
+        ])->get(env('API_URL').'nodin/detail')->json();
+        $detail = $response['results'];
+        return view('pages.document.detail', compact('detail'));
+    }
+
     public function draft(Request $request){
         return view('pages.document.draft');
     }

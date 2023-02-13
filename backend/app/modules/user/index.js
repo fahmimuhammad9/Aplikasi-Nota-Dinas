@@ -28,7 +28,7 @@ const USER = {
             }
             let userId = uuidv4();
             await CLIENT.query(`INSERT INTO s_user (s_user_id, created, createdby, updated, updatedby, isactive, 
-                username, name, email, phone, password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`, [
+                username, name, email, phone, password, s_role_id, s_organization_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`, [
                 userId,
                 moment(new Date).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss'),
                 userId,
@@ -39,12 +39,40 @@ const USER = {
                 req.body.name,
                 req.body.email,
                 PREFIX_PHONE_NUMBER(req.body.phone),
-                PASSWORD_HASH(req.body.password)
+                PASSWORD_HASH(req.body.password),
+                req.body.roleId,
+                req.body.organzationId
             ])
             return res.json({ status: 'OK', success: true, errors: false, message: 'Berhasil menambahkan Pengguna' })
         } catch (err) {
             return res.json({ status: 'OK', success: false, errors: true, message: err.message })
         }
+    },
+
+    findAll: (req, res)=>{
+        CLIENT.query(`
+        SELECT
+            su.s_user_id AS user_id,
+            su.username AS user_username,
+            su."name" AS user_name,
+            su.email AS user_email,
+            su.phone AS user_phone,
+            su.s_role_id AS role_id,
+            sr."name" AS role_name,
+            su.s_organization_id AS organization_id,
+            so."name" AS organization_name
+        FROM
+            s_user su
+        INNER JOIN s_role sr ON
+            sr.s_role_id = su.s_role_id
+        INNER JOIN s_organization so ON
+            so.s_organization_id = su.s_organization_id
+        WHERE
+            su.isactive = TRUE`).then((results)=>{
+                return res.json({status:'OK', success:true, errors:false, results: CAMEL_CASE(results.rows)});
+            }).catch((e)=>{
+                return res.json({status:'OK', success:false, errors:true, message: e.message});
+            })
     }
 }
 

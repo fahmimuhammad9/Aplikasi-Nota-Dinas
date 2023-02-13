@@ -20,7 +20,8 @@
                 <div class="card-title">
                     Tambah Pengguna (Single)
                 </div>
-                <form class="forms-sample">
+                <form class="forms-sample" method="post" action="{{route('setting-user-add')}}">
+                    @csrf
                     <div class="form-group">
                       <label for="exampleInputName1">Nama Lengkap</label>
                       <input type="text" class="form-control" placeholder="Masukkan Nama Lengkap" name="name" id="name">
@@ -28,6 +29,8 @@
                     <div class="form-group">
                       <label for="exampleInputEmail3">Nama Pengguna</label>
                       <input type="text" class="form-control" placeholder="Masukkan Nama Pengguna" name="username" id="username">
+                      <div class="usermessage"></div>
+                      <small id="usermessage"></small>
                     </div>
                     <div class="form-group">
                       <label for="exampleInputEmail3">Email</label>
@@ -95,12 +98,23 @@
         var password1 = document.getElementById("password1");
         var password2 = document.getElementById("password2");
         var message = document.getElementById("passmessage");
-
         password2.oninput = function(){
             if(password1.value != password2.value){
-                message.innerHTML = "<small class='text-danger'>Password Do Not Match</small>"
+                message.innerHTML = "<small class='text-danger'>Kata Sandi Tidak Sesuai</small>"
             } else {
-                message.innerHTML = "<small class='text-success'>Password Match</small>"
+                message.innerHTML = "<small class='text-success'>Kata Sandi Sama</small>"
+            }
+        }
+
+        var username = document.getElementById("username");
+        var messageuser = document.getElementById("usermessage");
+        username.oninput = function(){
+            if(username.value.indexOf(" ") >= 0){
+                messageuser.innerHTML = "<small class='text-danger'>Username Tidak Boleh Mengandung Spasi</small>"
+            } else if (username.value.indexOf(/[^a-zA-Z\d\s:\u00C0-\u00FF]/g) >= 0){
+                messageuser.innerHTML = "<small class='text-danger'>Username Harus Alphanumeric</small>"
+            } else {
+                messageuser.innerHTML = "<small class='text-success'>Username Bisa Digunakan</small>"
             }
         }
     </script>

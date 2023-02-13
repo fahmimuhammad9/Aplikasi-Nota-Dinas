@@ -90,7 +90,11 @@
                             <label class="badge badge-warning">{{$item['approvalStatus']}}</label>
                             @endif
                           </td>
-                          <td></td>
+                          <td>
+                            <a href="" class="btn btn-outline-success"><i class="ti-eye"></i></a>
+                            <a href="" class="btn btn-outline-warning"><i class="ti-write"></i></a>
+                            <a href="" class="btn btn-outline-danger"><i class="ti-trash"></i></a>
+                          </td>
                         </tr>
                         @empty
                         @endforelse
