@@ -3,11 +3,11 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-12 col-xl-8">
-                    <h3 class="font-weight-bold">Organisasi</h3>
+                    <h3 class="font-weight-bold">Pengaturan Kewenangan</h3>
                 </div>
                 <div class="col-12 col-xl-4">
                     <div class="justify-content-end d-flex">
-                        Pengaturan / Organisasi
+                        Pengaturan / Kewenangan
                     </div>
                 </div>
             </div>
@@ -20,48 +20,27 @@
                     <div class="card-title">
                     <div class="row">
                         <div class="col-12 col-xl-8">
-                            <h3 class="font-weight-bold">Semua Organisasi</h3>
+                            <h3 class="font-weight-bold">Semua Peran</h3>
                         </div>
                         <div class="col-12 col-xl-4">
                             <div class="justify-content-end d-flex">
-                                <a class="btn btn-success btn-md text-white" href="{{route('setting-user-add')}}">Tambah Organisasi</a>
+                                <a class="btn btn-success btn-md text-white" href="{{route('setting-user-add')}}">Tambah Peran Baru</a>
                             </div>
                         </div>
                     </div>
                     </div>
-                    <div class="table-responsive"> 
+                    <div class="table-responsive">
                     <table class="table" id="myTable">
                       <thead>
                         <tr>
                           <th>Nama</th>
                           <th>Level</th>
-                          <th>Induk</th>
+                          <th>Organisasi</th>
+                          <th>Nomor HP</th>
                           <th>Aksi</th>
                         </tr>
                       </thead>
                       <tbody>
-                        @forelse($org as $item)
-                        <tr>
-                            <td>
-                                {{$item['organizationName']}}
-                            </td>
-                            <td>
-                                {{$item['organizationLevel']}}
-                            </td>
-                            <td>
-                                {{$item['organizationParent']}}
-                            </td>
-                            <td>
-                                <a href="{{route('setting-org-detail', $item['organizationId'])}}" class="btn btn-md btn-outline-success">
-                                    <i class="ti-eye"></i>
-                                </a>
-                                <a href="" class="btn btn-md btn-outline-danger">
-                                    <i class="ti-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        @empty
-                        @endforelse
                       </tbody>
                     </table>
                   </div>

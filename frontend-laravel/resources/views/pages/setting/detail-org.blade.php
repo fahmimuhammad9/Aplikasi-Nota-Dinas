@@ -3,24 +3,24 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-12 col-xl-8">
-                    <h3 class="font-weight-bold">Pengaturan Pengguna</h3>
+                    <h3 class="font-weight-bold">{{$detail['orgName']}}</h3>
                 </div>
                 <div class="col-12 col-xl-4">
                     <div class="justify-content-end d-flex">
-                        Pengaturan / Pengguna
+                        Pengaturan / Detail Organisasi 
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row mt-2">
+    <div class="row mt-3">
         <div class="col-md-12 transparent">
             <div class="row">
                 <div class="col-md-4 mb-3 transparent">
                     <a href="" style="text-decoration: none;">
                     <div class="card card-tale">
                         <div class="card-body">
-                            <p class="mb-4">Pengguna Aktif</p>
+                            <p class="mb-4">Nota Dinas Dibuat</p>
                             <p class="fs-30 mb-2">4006</p>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                     <a href="" style="text-decoration: none;">
                     <div class="card card-dark-blue text-white">
                         <div class="card-body">
-                            <p class="mb-4">Pengguna Online</p>
+                            <p class="mb-4">Memo Dibuat</p>
                             <p class="fs-30 mb-2">61344</p>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                     <a href="" style="text-decoration: none;">
                     <div class="card card-light-danger">
                         <div class="card-body">
-                            <p class="mb-4">Pengguna Tidak Aktif</p>
+                            <p class="mb-4">Total Draft</p>
                             <p class="fs-30 mb-2">47033</p>
                         </div>
                     </div>
@@ -49,62 +49,69 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
+    <div class="row mt-3">
+        <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">
-                    <div class="row">
-                        <div class="col-12 col-xl-8">
-                            <h3 class="font-weight-bold">Semua Pengguna</h3>
-                        </div>
-                        <div class="col-12 col-xl-4">
-                            <div class="justify-content-end d-flex">
-                                <a class="btn btn-success btn-md text-white" href="{{route('setting-user-add')}}">Tambah Pengguna</a>
-                            </div>
-                        </div>
-                    </div>
+                        Anggota
                     </div>
                     <div class="table-responsive">
                     <table class="table" id="myTable">
                       <thead>
                         <tr>
                           <th>Nama</th>
-                          <th>Username</th>
-                          <th>Email</th>
-                          <th>Nomor HP</th>
+                          <th>Jabatan</th>
                           <th>Aksi</th>
                         </tr>
                       </thead>
                       <tbody>
-                        @forelse($user as $item)
+                        @foreach($detail['team'] as $item)
                         <tr>
-                            <td>
-                                {{$item['userName']}}
-                            </td>
-                            <td>
-                                {{$item['userUsername']}}
-                            </td>
-                            <td>
-                                {{$item['userEmail']}}
-                            </td>
-                            <td>
-                                {{$item['userPhone']}}
-                            </td>
+                            <td>{{$item['userName']}}</td>
+                            <td>{{$item['roleName']}}</td>
                             <td>
                                 <a href="" class="btn btn-md btn-outline-success">
                                     <i class="ti-eye"></i>
                                 </a>
-                                <a href="" class="btn btn-md btn-outline-danger">
-                                    <i class="ti-trash"></i>
+                                <a href="" class="btn btn-md btn-outline-warning">
+                                    <i class="ti-write"></i>
                                 </a>
                             </td>
                         </tr>
-                        @empty
-                        @endforelse
+                        @endforeach
                       </tbody>
                     </table>
                   </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">  
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        Organisasi Induk
+                    </div>
+                    <ul class="bullet-line-list">
+                        @forelse($detail['parent'] as $item)
+                        <li>
+							<h6>{{$item['orgName']}}</h6>
+							<p class="text-muted mb-4">
+								<i class="ti-time"></i>
+								7 months ago.
+							</p>
+						</li>
+                        @empty
+                        <li>
+							<h6>You Are Top of The King</h6>
+							<p>No Need Explanation From Anyone Your Are The King </p>
+							<p class="text-muted mb-4">
+								<i class="ti-time"></i>
+								7 months ago.
+							</p>
+						</li>
+                        @endforelse
+					</ul>
                 </div>
             </div>
         </div>

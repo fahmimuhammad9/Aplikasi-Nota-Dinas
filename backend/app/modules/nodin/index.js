@@ -7,7 +7,7 @@ const moment = require('moment');
 
 const NODIN = {
     checkOrigin: async(req, res)=>{
-        try{
+        try{    
             let results = await CLIENT.query(`
             WITH RECURSIVE org_role AS (
                 SELECT
@@ -61,15 +61,16 @@ const NODIN = {
     created: async(req, res)=>{
         try{
             let nodinId = uuidv4();
-            await CLIENT.query(`INSERT INTO d_nodin(d_nodin_id, created, createdby, updated, updatedby, isactive, 
+            await CLIENT.query(`INSERT INTO d_nodin(d_nodin_id, created, createdby, updated, updatedby, isactive, d_nodintype_id, 
                 from_user_id, to_user_id, up_date, char_severity_id, urgent_severity_id, title, content, isapprove)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,[
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,[
                     nodinId,
                     moment(new Date).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss'),
                     req.logged.userId,
                     moment(new Date).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss'),
                     req.logged.userId,
                     true,
+                    req.body.typeId,
                     req.body.fromUser,
                     req.body.toUser,
                     req.body.upDate,
@@ -79,7 +80,7 @@ const NODIN = {
                     req.body.content,
                     false
                 ])
-                let INPUT_APPROVA = await INSERT_APPROVAL_STEP(req.body.approval, req.logged.userId, nodinId);
+                let INPUT_APPROVA = await INSERT_APPROVAL_STEP(req.body.approval, req.logged.userId, nodinId, req.body.typeId);
                 if(INPUT_APPROVA.success==false && INPUT_APPROVA.errors==true) return res.json({status:'OK', success:false, errors:true, message:INPUT_APPROVA.message});
                 return res.json({status:'OK', success: true, errors:false, message:'Berhasil menambahkan Nota Dinas Baru'})
         }catch(err){
@@ -136,7 +137,8 @@ const NODIN = {
             FROM
                 d_nodin dn
             WHERE
-                dn.isactive = TRUE`);
+                dn.isactive = TRUE
+                AND dn.d_nodintype_id <> '7a39d940-f3c3-4414-8306-18aa04eaece6'`);
             Promise.all(
                 results.rows.map(async(val)=>{
                     val.approval_status = await (await CHECK_APPROVAL_STATUS(val.nodin_id)).results.status
@@ -145,6 +147,65 @@ const NODIN = {
             ).then((data)=>{
                 return res.json({status:'OK', success:true, errors:false, results: CAMEL_CASE(data)});
             })
+        }catch(err){
+            return res.json({status:'OK', success:false, errors:true, message: err.message});
+        }
+    },
+    myDraft: async(req, res)=>{
+        try{
+            let results = await CLIENT.query(`
+            SELECT
+                dn.d_nodin_id AS nodin_id,
+                dn.from_user_id ,
+                (
+                    SELECT
+                        su."name"
+                    FROM
+                        s_role su
+                    WHERE
+                        su.s_role_id = dn.from_user_id
+                ) AS from_user_role,
+                (
+                    SELECT
+                        so."name"
+                    FROM
+                        s_user su
+                    INNER JOIN s_organization so ON
+                        so.s_organization_id = su.s_organization_id
+                    WHERE
+                        su.s_role_id = dn.from_user_id
+                ) AS from_user_org,
+                dn.nodin_number ,
+                dn.up_date ,
+                dn.title ,
+                (
+                    SELECT
+                        ds."name"
+                    FROM
+                        d_severity ds
+                    WHERE
+                        ds.d_severity_id = dn.char_severity_id
+                ) AS char_severity_name,
+                (
+                    SELECT
+                        ds2."name"
+                    FROM
+                        d_severity ds2
+                    WHERE
+                        ds2.d_severity_id = dn.urgent_severity_id
+                )AS urgent_severity_name,
+                dn.isapprove ,
+                CASE
+                    WHEN dn.isapprove = FALSE THEN 'On Progress'
+                    ELSE 'Done'
+                END AS status
+            FROM
+                d_nodin dn
+            WHERE
+                dn.isactive = TRUE
+                AND dn.d_nodintype_id = '7a39d940-f3c3-4414-8306-18aa04eaece6'
+                AND dn.createdby  = '${req.logged.userId}'`);
+            return res.json({status:'OK', success:true, errors:false, results: CAMEL_CASE(results.rows)});
         }catch(err){
             return res.json({status:'OK', success:false, errors:true, message: err.message});
         }
@@ -260,7 +321,7 @@ const CHECK_APPROVAL_STATUS = async(nodinId) =>{
     }
 }
 
-const INSERT_APPROVAL_STEP = async(approval, userCreated, nodinId) => {
+const INSERT_APPROVAL_STEP = async(approval, userCreated, nodinId, type) => {
     try{
         approval.map(async(val)=>{
             let approvalId = uuidv4();
@@ -275,7 +336,7 @@ const INSERT_APPROVAL_STEP = async(approval, userCreated, nodinId) => {
                     nodinId, 
                     val.userId,
                     '',
-                    userCreated == val.userId ? true : false
+                    userCreated == val.userId && type=='2971dc40-23f7-4f04-90ab-a4b6b531a1e7' ? true : false
                 ])
         })
         return {success:true, errors:false, message:'Berhasil'};

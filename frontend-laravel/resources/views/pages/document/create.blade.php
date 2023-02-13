@@ -66,8 +66,8 @@
                       <label for="myeditorinstance">Textarea</label>
                       <textarea id="myeditorinstance" name="content"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary me-2">Submit</button>
-                    <button class="btn btn-light">Cancel</button>
+                    <button type="submit" name="action" value="approve" class="btn btn-primary me-2">Submit Nota Dinas</button>
+                    <button type="submit" name="action" value="draft" class="btn btn-secondary text-white me-2">Simpan Sebagai Draft</button>
                   </form>
                 </div>  
             </div>

@@ -35,6 +35,7 @@ Route::middleware(['auth_admin'])->group(function(){
     Route::get('/setting/user',[Setting::class,'userSetting'])->name('setting-user');
     Route::match(['get','post'],'/setting/add/user',[Setting::class,'addUser'])->name('setting-user-add');
     Route::get('/setting/organization',[Setting::class,'orgSetting'])->name('setting-org');
+    Route::get('/setting/detail/organization/{id}',[Setting::class,'orgDetail'])->name('setting-org-detail');
 
     Route::get('/dashboard',[Dashboard::class, 'index'])->name('dashboard');
     Route::get('/logout',[Auth::class, 'logout'])->name('logout');
@@ -48,4 +49,5 @@ Route::middleware(['auth_admin'])->group(function(){
     Route::get('/nodin/nodin-tagged',[Nodin::class,'tagged'])->name('nodin-tagged');
     Route::get('/nodin',[Nodin::class,'findAll'])->name('nodin-all');
     Route::match(['GET', 'POST'], '/nodin/nodin-create',[Nodin::class,'create'])->name('nodin-create');
+    Route::get('/nodin/nodin-detail/{id}',[Nodin::class,'detail'])->name('nodin-detail');
 });

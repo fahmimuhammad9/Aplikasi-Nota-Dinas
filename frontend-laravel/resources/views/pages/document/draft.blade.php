@@ -21,43 +21,30 @@
                     <table id="myTable" class="table table-hover">
                       <thead>
                         <tr>
-                          <th>User</th>
-                          <th>Product</th>
-                          <th>Sale</th>
-                          <th>Status</th>
+                          <th>Perihal</th>
+                          <th>Tanggal</th>
+                          <th>Urgensi / Karakter</th>
+                          <th></th>
                         </tr>
                       </thead>
                       <tbody>
+                        @foreach($draft as $item)
                         <tr>
-                          <td>Jacob</td>
-                          <td>Photoshop</td>
-                          <td class="text-danger"> 28.76% <i class="ti-arrow-down"></i></td>
-                          <td><label class="badge badge-danger">Pending</label></td>
+                          <td>{{$item['title']}}</td>
+                          <td>{{date('d-m-Y',strtotime($item['upDate']))}}</td>
+                          <td>
+                            <span class="badge badge-primary">{{$item['urgentSeverityName']}} / {{$item['charSeverityName']}}</span>
+                          </td>
+                          <td>
+                            <a href="" class="btn btn-md btn-outline-success">
+                              <i class="ti-eye"></i>
+                            </a>
+                            <a href="" class="btn btn-md btn-outline-warning">
+                              <i class="ti-trash"></i>
+                            </a>
+                          </td>
                         </tr>
-                        <tr>
-                          <td>Messsy</td>
-                          <td>Flash</td>
-                          <td class="text-danger"> 21.06% <i class="ti-arrow-down"></i></td>
-                          <td><label class="badge badge-warning">In progress</label></td>
-                        </tr>
-                        <tr>
-                          <td>John</td>
-                          <td>Premier</td>
-                          <td class="text-danger"> 35.00% <i class="ti-arrow-down"></i></td>
-                          <td><label class="badge badge-info">Fixed</label></td>
-                        </tr>
-                        <tr>
-                          <td>Peter</td>
-                          <td>After effects</td>
-                          <td class="text-success"> 82.00% <i class="ti-arrow-up"></i></td>
-                          <td><label class="badge badge-success">Completed</label></td>
-                        </tr>
-                        <tr>
-                          <td>Dave</td>
-                          <td>53275535</td>
-                          <td class="text-success"> 98.05% <i class="ti-arrow-up"></i></td>
-                          <td><label class="badge badge-warning">In progress</label></td>
-                        </tr>
+                        @endforeach
                       </tbody>
                     </table>
                   </div>

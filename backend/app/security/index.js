@@ -15,6 +15,8 @@ const SECURITY = {
                 select
                     su.s_user_id as user_id,
                     su."password" as user_password,
+                    su.s_role_id as role_id,
+                    su."name" as user_name,
                     su.s_role_id as role_id
                 from
                     s_user su
@@ -26,7 +28,7 @@ const SECURITY = {
                         let checkPassword = VALID_PASSWORD(req.body.password, results.rows[0].user_password);
                         if (checkPassword === true) {
                             let token = jwt.sign({ userId: results.rows[0].user_id }, process.env.JWT_SECRET)
-                            res.json({ status: 'OK', success: true, errors: false, token: token })
+                            res.json({ status: 'OK', success: true, errors: false, token: token, name : results.rows[0].user_name, role: results.rows[0].role_id })
                         } else {
                             res.json({ status: 'OK', success: false, errors: true, message: 'Kata Sandi Tidak Valid' })
                         }

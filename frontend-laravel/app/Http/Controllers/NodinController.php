@@ -10,6 +10,12 @@ class NodinController extends Controller
 {
     public function create(Request $request){
         if($request->isMethod('POST')){
+            $type = '';
+            if($request->input('action')=='approve'){
+               $type = '2971dc40-23f7-4f04-90ab-a4b6b531a1e7';
+            } else if($request->input('action')=='draft'){
+                $type = '7a39d940-f3c3-4414-8306-18aa04eaece6';
+            }
             $response = Http::withToken(session('access_token'))->get(env('API_URL').'nodin/origin')->json();
             $approval = $response['results'];
             $postingInfo = Http::withToken(session('access_token'))->post(env('API_URL').'nodin',[
@@ -20,10 +26,11 @@ class NodinController extends Controller
                 'urgentSeverity' => $request->urgent,
                 'title' => $request->title,
                 'content' => $request->content,
-                'approval' => $approval
+                'approval' => $approval,
+                'typeId' => $type 
             ])->json();
             if($postingInfo['success']){
-                return redirect()->route('nodin');
+                return redirect()->route('nodin-all');
             }else {
                 return redirect()->back()->with('error', $postingInfo['message']);
             }
@@ -49,13 +56,17 @@ class NodinController extends Controller
     }
 
     public function draft(Request $request){
-        return view('pages.document.draft');
+        $response = Http::withToken(session('access_token'))->get(env('API_URL').'nodin/draft')->json();
+        $draft = $response['results'];
+        return view('pages.document.draft', compact('draft'));
     }
 
     public function findAll(Request $request){
+        $dash = Http::withToken(session('access_token'))->get(env('API_URL').'dashboard/nodin')->json();
         $response = Http::withToken(session('access_token'))->get(env('API_URL').'nodin')->json();
+        $status = $dash['results'];
         $nodin = $response['results'];
-        return view('pages.document.findall', compact('nodin'));
+        return view('pages.document.findall', compact('nodin', 'status'));
     }
 
     public function progress(Request $request){

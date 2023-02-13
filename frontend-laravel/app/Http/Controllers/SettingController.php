@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Validator;
 
 class SettingController extends Controller
 {
+    public function documentSetting(Request $request){
+        $response = Http::withToken(session('access_token'))->get(env('API_URL').'')->json();
+    }
+
     public function userSetting(Request $request){
         $response = Http::withToken(session('access_token'))->get(env('API_URL').'user')->json();
         $user = $response['results'];
@@ -43,5 +47,16 @@ class SettingController extends Controller
         $response = Http::withToken(session('access_token'))->get(env('API_URL').'organization')->json();
         $org = $response['results'];
         return view('pages.setting.auth', compact('org'));
+    }
+
+    public function orgDetail(Request $request, $id){
+        $response = Http::withToken(session('access_token'))->withOptions([
+            'query' => [
+                'organizationId' => $id
+            ]
+        ])->get(env('API_URL').'organization/detail')->json();  
+        $detail = $response['results'];
+
+        return view('pages.setting.detail-org', compact('detail'));
     }
 }

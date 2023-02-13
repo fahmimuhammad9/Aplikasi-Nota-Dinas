@@ -9,7 +9,12 @@ use Illuminate\Support\Facades\Validator;
 class DivisionController extends Controller
 {
     public function index(Request $request){
-        return view('pages.division.findall');
+        $chart = Http::withToken(session('access_token'))->get(env('API_URL').'organization/division')->json();
+        $chartdiv = $chart['step'];
+        $chartnode = $chart['results'];
+        $data = json_encode($chartdiv);
+        $nodes = json_encode($chartnode);
+        return view('pages.division.findall', compact('data', 'nodes'));
     }
 
     public function mine(Request $request){

@@ -69,6 +69,8 @@
 
   </style>
   @endpush
+  <div id="element" data-array="{{$data}}"></div>
+  <div id="nodenya" data-array="{{$nodes}}"></div>
   <div class="row">
     <div class="col-md-12">
         <div class="row">
@@ -131,6 +133,15 @@
             $(document).ready( function () {
                 $('#myTable').DataTable();
             } );
+            var element = document.getElementById('element');
+            var nodenya = document.getElementById('nodenya');
+            var i_node = JSON.parse(nodenya.getAttribute("data-array"));
+            var i_data = JSON.parse(element.getAttribute("data-array"));
+            console.log(i_data);
+            console.log(i_node);
+            var k_data = Object.values(i_data);
+            var j_data  = Object.keys(i_data).map(function(key){return i_data[key];});
+            console.log(j_data);
             Highcharts.chart('container', {
     chart: {
         height: 600,

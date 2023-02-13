@@ -21,7 +21,7 @@
                     <div class="card card-tale">
                         <div class="card-body">
                             <p class="mb-4">Dokumen Draft Saya</p>
-                            <p class="fs-30 mb-2">4006</p>
+                            <p class="fs-30 mb-2">{{$status['totalDraft']}}</p>
                         </div>
                     </div>
                     </a>
@@ -31,7 +31,7 @@
                     <div class="card card-dark-blue text-white">
                         <div class="card-body">
                             <p class="mb-4">Dokumen Dalam Proses</p>
-                            <p class="fs-30 mb-2">61344</p>
+                            <p class="fs-30 mb-2">{{$status['totalDocument']}}</p>
                         </div>
                     </div>
                     </a>
@@ -40,8 +40,8 @@
                     <a href="" style="text-decoration: none;">
                     <div class="card card-light-blue">
                         <div class="card-body">
-                            <p class="mb-4">Surat Masuk</p>
-                            <p class="fs-30 mb-2">34040</p>
+                            <p class="mb-4">Dokumen Selesai</p>
+                            <p class="fs-30 mb-2">{{$status['totalDone']}}</p>
                         </div>
                     </div>
                     </a>
@@ -51,7 +51,7 @@
                     <div class="card card-light-danger">
                         <div class="card-body">
                             <p class="mb-4">Dokumen Di Tandai</p>
-                            <p class="fs-30 mb-2">47033</p>
+                            <p class="fs-30 mb-2">{{$status['totalTagged']}}</p>
                         </div>
                     </div>
                     </a>
@@ -70,7 +70,7 @@
                     <table class="table" id="myTable">
                       <thead>
                         <tr>
-                          <th>Pembuat</th>
+                          <th>Dari</th>
                           <th>Tanggal Pengajuan</th>
                           <th>Perihal</th>
                           <th>Status</th>
@@ -91,7 +91,7 @@
                             @endif
                           </td>
                           <td>
-                            <a href="" class="btn btn-outline-success"><i class="ti-eye"></i></a>
+                            <a href="{{route('nodin-detail',$item['nodinId'])}}" class="btn btn-outline-success"><i class="ti-eye"></i></a>
                             <a href="" class="btn btn-outline-warning"><i class="ti-write"></i></a>
                             <a href="" class="btn btn-outline-danger"><i class="ti-trash"></i></a>
                           </td>

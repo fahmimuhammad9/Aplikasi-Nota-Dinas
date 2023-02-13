@@ -26,7 +26,8 @@ class AuthController extends Controller
 
             if($response['success']===true){
                 session()->put('access_token',$response['token']);
-                // session()->put('roles','superuser');
+                session()->put('roles',$response['role']);
+                session()->put('user_name', $response['name']);
                 return redirect('/dashboard'); 
             } else {
                 return redirect()->back()->with('error', $response['message']);
