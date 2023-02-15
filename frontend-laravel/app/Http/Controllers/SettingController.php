@@ -9,7 +9,11 @@ use Illuminate\Support\Facades\Validator;
 class SettingController extends Controller
 {
     public function documentSetting(Request $request){
-        $response = Http::withToken(session('access_token'))->get(env('API_URL').'')->json();
+        $response_code = Http::withToken(session('access_token'))->get(env('API_URL').'nodin/code')->json();
+        $response_user = Http::withToken(session('access_token'))->get(env('API_URL').'user')->json();
+        $user = $response_user['results'];
+        $code = $response_code['results'];
+        return view('pages.setting.document', compact('code', 'user'));
     }
 
     public function userSetting(Request $request){
@@ -18,9 +22,32 @@ class SettingController extends Controller
         return view('pages.setting.user', compact('user'));
     }
 
+    public function deleteEditUser(Request $request, $id){
+        $response = Http::withToken(session('access_token'))->withOptions([
+            'query' => [
+                'userId' => $id
+            ]
+        ])->delete(env('API_URL').'user')->json();
+        if($response['success']){
+            return redirect()->route('setting-user')->with('success', $response['message']);
+        }else{
+            return redirect()->back()->with('error', $response['message']);
+        }
+    }
+
+    public function detailUser(Request $request, $id){
+        $response = Http::withToken(session('access_token'))->withOptions([
+            'query' => [
+                'userId' => $id
+            ]
+        ])->get(env('API_URL').'user/detail')->json();
+        $detail = $response['results'];
+        return view('pages.setting.detail-user', compact('detail'));
+    }
+
     public function addUser(Request $request){
         if($request->isMethod('POST')){
-            $response = Http::withToken(session('access_token'))->post(env('API_URL').'user/register',[
+            $response = Http::withToken(session('access_token'))->post(env('API_URL').'user',[
                 'name' => $request->name,
                 'username' => $request->username,
                 'email' => $request->email,
@@ -30,7 +57,7 @@ class SettingController extends Controller
                 'organizationId' => $request->org 
             ])->json();
             if($response['success']){
-                return redirect()->route('setting-user');
+                return redirect()->route('setting-user')->with('success', $response['message']);
             } else {
                 return redirect()->back()->with('error', $response['message']);
             }

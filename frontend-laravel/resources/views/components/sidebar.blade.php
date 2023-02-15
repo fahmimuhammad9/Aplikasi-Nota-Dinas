@@ -80,7 +80,7 @@
             </a>
             <div class="collapse" id="pengaturan-pengguna">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="">Dokumen</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{route('setting-document')}}">Dokumen</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{route('setting-user')}}">Pengguna</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{route('setting-org')}}">Organisasi</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Kewenangan</a></li>

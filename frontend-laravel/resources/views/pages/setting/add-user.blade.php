@@ -14,6 +14,15 @@
         </div>
     </div>
     <div class="row">
+        <div class="col">
+            @if(session()->has('error'))
+                <div class="alert alert-danger text-center" role="alert">
+                    {{session('error')}}
+                </div>
+            @endif
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">

@@ -21,7 +21,7 @@
                     <h4>Nama Saya</h4>
                     <p>Staff Pengembangan Aplikasi & TI</p>
                 </div>
-                <button class="btn btn-info btn-sm mt-3 mb-4 mx-3">
+                <button class="btn btn-primary btn-sm mt-3 mb-4 mx-3">
                     Edit Profile
                 </button>
                 <div class="border-top pt-3 text-center">

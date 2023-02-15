@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-md-3 mb-3 transparent">
                     <a href="" style="text-decoration: none;">
-                    <div class="card card-tale">
+                    <div class="card card-kuning">
                         <div class="card-body">
                             <p class="mb-4">Dokumen Draft Saya</p>
                             <p class="fs-30 mb-2">{{$status['totalDraft']}}</p>
@@ -28,7 +28,7 @@
                 </div>
                 <div class="col-md-3 mb-3 transparent">
                     <a href="" style="text-decoration: none;">
-                    <div class="card card-dark-blue text-white">
+                    <div class="card card-biru-smp text-white">
                         <div class="card-body">
                             <p class="mb-4">Dokumen Dalam Proses</p>
                             <p class="fs-30 mb-2">{{$status['totalDocument']}}</p>
@@ -38,7 +38,7 @@
                 </div>
                 <div class="col-md-3 mb-3  transparent">
                     <a href="" style="text-decoration: none;">
-                    <div class="card card-light-blue">
+                    <div class="card card-hijau-tua">
                         <div class="card-body">
                             <p class="mb-4">Dokumen Selesai</p>
                             <p class="fs-30 mb-2">{{$status['totalDone']}}</p>
@@ -48,7 +48,7 @@
                 </div>
                 <div class="col-md-3 mb-3 transparent">
                     <a href="" style="text-decoration: none;">
-                    <div class="card card-light-danger">
+                    <div class="card card-merah-pastel">
                         <div class="card-body">
                             <p class="mb-4">Dokumen Di Tandai</p>
                             <p class="fs-30 mb-2">{{$status['totalTagged']}}</p>

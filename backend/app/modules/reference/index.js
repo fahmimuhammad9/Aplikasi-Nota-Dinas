@@ -25,6 +25,24 @@ const REFERENCE = {
         }catch(err){
             return res.json({status:'OK', success:false, errors:true, message: err.message});
         }
+    },
+
+    findAll: async(req, res)=>{
+        try{
+            let results = await CLIENT.query(`
+            SELECT
+                sr.s_reference_id AS reference_id,
+                sr."name" AS reference_name,
+                sr.alias AS reference_alias,
+                sr.value AS reference_value
+            FROM
+                s_reference sr
+            WHERE
+                sr.isactive = TRUE`)
+            return res.json({status:'OK', success:true, errors:false, results: CAMEL_CASE(results.rows)});
+        }catch(err){
+            return res.json({status:'OK', success:false, errors:true, message: err.message});
+        }
     }
 }
 

@@ -213,6 +213,37 @@ const NODIN = {
     uploadAttachment: async(req, res)=>{
 
     },
+    stepApproval: async(req, res)=>{
+        try{
+            let results = await CLIENT.query(`
+            SELECT
+                dn.d_nodinapproval_id AS nodin_approval_id,
+                dn.d_nodin_id AS nodin_id,
+                dn.s_user_id AS user_id,
+                dn.review ,
+                dn.isapprove 
+            FROM
+                d_nodinapproval dn
+                WHERE dn.isapprove = FALSE 
+                AND dn.d_nodin_id = '${req.query.nodinId}'`);
+            let data = results.rows;
+            let isTurn = false;
+            if(data[0]==req.logged.roleId){
+                isTurn = true;
+            }
+            return res.json({status:'OK', success:true, errors:false, results: CAMEL_CASE(results.rows), myTurn : isTurn});
+        }catch(err){
+            return res.json({status:'OK', success:false, errors:true, message: err.message});
+        }
+    },
+    stepApprove: async(req, res)=>{
+        try{
+            await CLIENT.query(`UPDATE d_nodinapproval SET isapprove=TRUE WHERE d_nodin_id='${req.query.nodinId}' AND s_user_id='${req.logged.roleId}'`);
+            return res.json({status:'OK', success:true, errors:false, message:'Berhasil Approve Permintaan Nota Dinas'});
+        }catch(err){
+            return res.json({status:'OK', success:false, errors:true, message: err.message});
+        }
+    },
     findById: async(req, res)=>{
         try{
             let results = await CLIENT.query(`
@@ -264,6 +295,7 @@ const NODIN = {
             let approval = await CLIENT.query(`
             SELECT
                 dn.d_nodinapproval_id AS approval_id,
+                dn.s_user_id as user_id,
                 su."name" AS approval_person_name,
                 sr."name" AS approval_person_role,
                 so."name" AS approval_person_organization,

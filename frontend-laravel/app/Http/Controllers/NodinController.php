@@ -51,8 +51,14 @@ class NodinController extends Controller
                 'nodinId' => $id
             ]
         ])->get(env('API_URL').'nodin/detail')->json();
+        $response2 = Http::withToken(session('access_token'))->withOptions([
+            'query' => [
+                'nodinId' => $id
+            ]
+        ])->get(env('API_URL').'nodin/approval')->json();
         $detail = $response['results'];
-        return view('pages.document.detail', compact('detail'));
+        $not_approval = $response2['results'];
+        return view('pages.document.detail', compact('detail','not_approval'));
     }
 
     public function draft(Request $request){

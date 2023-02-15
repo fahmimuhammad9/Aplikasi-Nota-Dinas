@@ -34,8 +34,11 @@ Route::middleware(['auth_admin'])->group(function(){
 
     Route::get('/setting/user',[Setting::class,'userSetting'])->name('setting-user');
     Route::match(['get','post'],'/setting/add/user',[Setting::class,'addUser'])->name('setting-user-add');
+    Route::match(['get','post'],'/setting/edit-add/user/{id}',[Setting::class,'deleteEditUser'])->name('setting-user-edit-delete');
+    Route::get('/setting/user/{id}',[Setting::class,'detailUser'])->name('setting-user-detail');
     Route::get('/setting/organization',[Setting::class,'orgSetting'])->name('setting-org');
     Route::get('/setting/detail/organization/{id}',[Setting::class,'orgDetail'])->name('setting-org-detail');
+    Route::get('/setting/document',[Setting::class,'documentSetting'])->name('setting-document');
 
     Route::get('/dashboard',[Dashboard::class, 'index'])->name('dashboard');
     Route::get('/logout',[Auth::class, 'logout'])->name('logout');

@@ -3,9 +3,7 @@
         <div class="col-md-12 mb-3">
             <div class="row">
                 <div class="col-12 col-xl-8">
-                    <h3 class="font-weight-bold">Welcome {{session('user_name')}}</h3>
-                    <h6 class="font-weight-normal mb-0">All systems are running smoothly! You have <span
-                            class="text-primary">3 unread alerts!</span></h6>
+                    <h3 class="font-weight-bold">Selamat Datang, {{session('user_name')}}!</h3>
                 </div>
                 <div class="col-12 col-xl-4">
                     <div class="justify-content-end d-flex">
@@ -20,7 +18,7 @@
             <div class="row">
                 <div class="col-md-3 mb-3 transparent">
                     <a href="" style="text-decoration: none;">
-                    <div class="card card-tale">
+                    <div class="card card-hijau-tua">
                         <div class="card-body">
                             <p class="mb-4">Dokumen Draft Saya</p>
                             <p class="fs-30 mb-2">4006</p>
@@ -30,7 +28,7 @@
                 </div>
                 <div class="col-md-3 mb-3 transparent">
                     <a href="" style="text-decoration: none;">
-                    <div class="card card-dark-blue text-white">
+                    <div class="card card-kuning text-white">
                         <div class="card-body">
                             <p class="mb-4">Dokumen Dalam Proses</p>
                             <p class="fs-30 mb-2">61344</p>
@@ -40,7 +38,7 @@
                 </div>
                 <div class="col-md-3 mb-3  transparent">
                     <a href="" style="text-decoration: none;">
-                    <div class="card card-light-blue">
+                    <div class="card card-biru-smp">
                         <div class="card-body">
                             <p class="mb-4">Surat Masuk</p>
                             <p class="fs-30 mb-2">34040</p>
@@ -50,7 +48,7 @@
                 </div>
                 <div class="col-md-3 mb-3 transparent">
                     <a href="" style="text-decoration: none;">
-                    <div class="card card-light-danger">
+                    <div class="card card-merah-pastel">
                         <div class="card-body">
                             <p class="mb-4">Dokumen Di Tandai</p>
                             <p class="fs-30 mb-2">47033</p>

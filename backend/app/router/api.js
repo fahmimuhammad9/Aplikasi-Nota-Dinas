@@ -17,6 +17,7 @@ const TYPE = require('../modules/type');
 const PRINT = require('../modules/print');
 const NODIN_TYPE = require('../modules/nodin/type');
 const DASHBOARD = require('../modules/dashboard');
+const NODIN_CODE = require('../modules/nodin/code');
 
 dotenv.config();
 
@@ -48,7 +49,11 @@ API_ROUTER.route('/view').get(PRINT.test);
 API_ROUTER.route('/register').post(USER.register);
 API_ROUTER.route('/login').post(SECURITY.login);
 
+
 API_ROUTER.route('/user').get(SECURITY.verify, USER.findAll);
+API_ROUTER.route('/user').post(SECURITY.verify, USER.registerv2);
+API_ROUTER.route('/user').delete(SECURITY.verify, USER.deleted);
+API_ROUTER.route('/user/detail').get(SECURITY.verify, USER.findById);
 
 API_ROUTER.route('/roles').post(SECURITY.verify, USER_ROLES.created);
 API_ROUTER.route('/roles').get(SECURITY.verify, USER_ROLES.findAll);
@@ -66,6 +71,12 @@ API_ROUTER.route('/organization/roles').get(SECURITY.verify, ROLES.findAll);
 API_ROUTER.route('/nodin/type').post(SECURITY.verify, NODIN_TYPE.created);
 API_ROUTER.route('/nodin/type').get(SECURITY.verify, NODIN_TYPE.findAll);
 API_ROUTER.route('/nodin/type').delete(SECURITY.verify, NODIN_TYPE.deleted);
+
+API_ROUTER.route('/nodin/code').get(SECURITY.verify, NODIN_CODE.findAll);
+API_ROUTER.route('/nodin/code').post(SECURITY.verify, NODIN_CODE.created);
+API_ROUTER.route('/nodin/code').delete(SECURITY.verify, NODIN_CODE.deleted);
+
+API_ROUTER.route('/nodin/approval').get(SECURITY.verify, NODIN.stepApproval);
 
 API_ROUTER.route('/nodin/origin').get(SECURITY.verify, NODIN.checkOrigin);
 API_ROUTER.route('/nodin/detail').get(SECURITY.verify, NODIN.findById);
